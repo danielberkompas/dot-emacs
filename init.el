@@ -59,30 +59,6 @@
 ;; Do not use default slight delay
 (setq show-paren-delay 0)
 
-;; Autocomplete
-;; (require 'auto-complete-config)
-;; (ac-config-default)
-;; (setq ac-ignore-case nil)
-;; (add-to-list 'ac-modes 'enh-ruby-mode)
-;; (add-to-list 'ac-modes 'web-mode)
-;; (add-to-list 'ac-modes 'elixir-mode)
-;; (auto-complete-mode t)
-;; ;; Do not autocomplete on RET
-;; (define-key ac-completing-map [return] nil)
-;; (define-key ac-completing-map "\r" nil)
-;; ;; autocomplete within strings
-;; (setq ac-disable-faces nil)
-;; (custom-set-variables
-;;   '(ac-etags-requires 1))
-
-;; (eval-after-load "etags"
-;;   '(progn
-;;       (ac-etags-setup)))
-
-;; (add-hook 'c-mode-common-hook 'ac-etags-ac-setup)
-;; (add-hook 'enh-ruby-mode-hook 'ac-etags-ac-setup)
-;; (add-hook 'elixir-mode-hook 'ac-etags-ac-setup)
-
 ;;==============================================================================
 ;; Autocomplete with company-mode
 ;;==============================================================================
@@ -175,28 +151,14 @@
 (evil-leader/set-leader ",")
 (evil-leader/set-key
   "." 'find-tag
-  "t" 'projectile-find-file
+  ;; "t" 'projectile-find-file
   "b" 'ido-switch-buffer
   "cc" 'evilnc-comment-or-uncomment-lines
   "ag" 'projectile-ag
   "," 'switch-to-previous-buffer
-  ; "gg" 'git-gutter+:toggle
-  ; "gd" 'git-gutter+:popup-diff
-  ; "gp" 'git-gutter+:previous-hunk
-  ; "gn" 'git-gutter+:next-hunk
-  ; "gr" 'git-gutter+:revert-hunk
-  "gb" 'mo-git-blame-current
-  "gl" 'magit-log
-  "gs" 'magit-status
   "w"  'kill-buffer
-  "nn" 'neotree-toggle
-  "nf" 'neotree-find
-  "gk" 'windmove-up
-  "gj" 'windmove-down
-  "gl" 'windmove-right
-  "gh" 'windmove-left
-  "vs" 'split-window-right
-  "hs" 'split-window-below
+  "vv" 'split-window-right
+  "ss" 'split-window-below
   "x" 'smex)
 
 ;; =============================================================================
@@ -225,6 +187,19 @@ Repeated invocations toggle between the two most recently open buffers."
 (define-key evil-normal-state-map (kbd "C-j") 'evil-scroll-down)
 (define-key evil-normal-state-map (kbd "C-k") 'evil-scroll-up)
 
+;; Split Navigation
+(define-key evil-normal-state-map (kbd "C-l") 'windmove-right)
+(define-key evil-normal-state-map (kbd "C-h") 'windmove-left)
+(define-key evil-normal-state-map (kbd "C-k") 'windmove-up)
+(define-key evil-normal-state-map (kbd "C-j") 'windmove-down)
+
+;; NeoTree
+(define-key evil-normal-state-map (kbd "C-n") 'neotree-toggle)
+
+;; Projectile Find File
+(define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
+(define-key evil-visual-state-map (kbd "C-p") 'projectile-find-file)
+(define-key evil-motion-state-map (kbd "C-p") 'projectile-find-file)
 
 ;; Make ";" behave like ":" in normal mode
 (define-key evil-normal-state-map (kbd ";") 'evil-ex)
@@ -235,8 +210,7 @@ Repeated invocations toggle between the two most recently open buffers."
 (define-key evil-normal-state-map (kbd "gy") (kbd "gg v G y"))
 
 (setq key-chord-two-keys-delay 0.075)
-;; (key-chord-define evil-insert-state-map "Jk" 'evil-normal-state)
-;; (key-chord-define evil-insert-state-map "JK" 'evil-normal-state)
+(key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
 (key-chord-mode 1)
 (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 
@@ -360,46 +334,6 @@ Repeated invocations toggle between the two most recently open buffers."
   (my-evil-terminal-cursor-change)
 
 
-;; (defun change-major-mode-hook () (modify-syntax-entry ?_ "w"))
-
-; (defun evil-move-point-by-word (dir)
-;   "Used internally by evil
-;
-; A pure-vim emulation of move-word runs slow, but emacs forward-word
-; does not recognize underscores as word boundaries. This method calls
-; Emacs native forward-word, and then repeats if it detects it stopped
-; on an underscore."
-;   (let ((success (forward-word dir))
-;         (fn (if (= 1 dir) 'looking-at 'looking-back)))
-;
-;     (if (and success (funcall fn "_"))
-;         (evil-move-point-by-word dir)
-;       success)))
-;
-; (defun evil-forward-word (&optional count)
-;   "Move by words.
-; Moves point COUNT words forward or (- COUNT) words backward if
-; COUNT is negative. This function is the same as `forward-word'
-; but returns the number of words by which point could *not* be
-; moved."
-;   (setq count (or count 1))
-;   (let* ((dir (if (>= count 0) +1 -1))
-;          (count (abs count)))
-;     (while (and (> count 0)
-;                 (evil-move-point-by-word dir))
-;       (setq count (1- count)))
-;     count))
-;
-; (evil-define-union-move evil-move-word (count)
-;   "Move by words."
-;   (evil-move-chars "^ \t\r\n[:word:]_" count)
-;   (let ((word-separating-categories evil-cjk-word-separating-categories)
-;         (word-combining-categories evil-cjk-word-combining-categories))
-;     (evil-forward-word count))
-;   (evil-move-empty-lines count))
-
-
-
 ;; =============================================================================
 ;; Custom Packages
 ;; =============================================================================
@@ -434,8 +368,8 @@ Repeated invocations toggle between the two most recently open buffers."
     (ruby-end-mode +1)))
 
 (load "~/.emacs.d/packages/change-case.el")
-;; (add-to-list 'load-path "~/.emacs.d/packages/alchemist/")
-;; (require 'alchemist)
+(add-to-list 'load-path "~/.emacs.d/packages/alchemist/")
+(require 'alchemist)
 ;;; esc quits
 ;; (define-key evil-normal-state-map (kbd "ESC") 'keyboard-quit)
 ;; (define-key evil-visual-state-map (kbd "ESC") 'keyboard-quit)
